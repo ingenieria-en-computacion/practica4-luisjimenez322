@@ -1,72 +1,68 @@
-#include <stdio.h>   // Biblioteca estándar para entrada y salida
-#include <stdlib.h>  // Biblioteca para manejo de memoria dinámica
-#include <string.h>  // Biblioteca para manipulación de cadenas
+#include<stdlib.h> 
+#include<stdio.h>
+#include<string.h> //Cadenas
 
-#define MAX_NOMBRE 50 // Tamaño máximo del nombre del estudiante
+#define mn 50 //Tamaño max. de nombre del alumno
 
-// Definimos la estructura Estudiante con dos campos: nombre y edad
-typedef struct {
-    char nombre[MAX_NOMBRE]; // Arreglo de caracteres para almacenar el nombre
-    int edad;                // Entero para almacenar la edad
-} Estudiante;
+typedef struct //Estructura de estudainte, con nombre y edad
+{
+    char name[mn]; //Arreglo para almacenar nombre
+    int edad; //Almacena edad(entero)
+}estudiante; 
 
-int main() {
-    Estudiante *lista;  // Puntero a la lista dinámica de estudiantes
-    int capacidad = 2;  // Capacidad inicial del arreglo de estudiantes
-    int cantidad = 0;   // Contador de estudiantes ingresados
+int main()
+{
+    estudiante *lista; //Apuntador
+    int cap=2; //Capacidad inicial del arreglo de estudiantes
+    int cant=0; //Cuenta los estudiantes ingresados
 
-    // Reservamos memoria inicialmente con malloc para 2 estudiantes
-    lista = (Estudiante *)malloc(capacidad * sizeof(Estudiante));
+    lista=(estudiante*)malloc(cap* sizeof(estudiante)); //Reserva memoria para 2 estudiantes
 
-    // Verificamos si la asignación de memoria fue exitosa
-    if (lista == NULL) {
-        printf("Error al asignar memoria.\n");
-        return 1; // Terminamos el programa con error
+    if (lista==NULL) //Verifica si se asigno memoria de manera adecuada
+    {
+        printf("Error al asignar memoria\n");
+        return 1; //1 indica que hubo un error
     }
 
-    printf("Ingrese los datos de los estudiantes (nombre y edad). Escriba 'fin' para terminar.\n");
+    printf("Ingrese el nombre y edad del estudiante: (`fin` para terminar) \n");
 
-    while (1) { // Bucle infinito para recibir estudiantes hasta que el usuario decida parar
-        char nombre[MAX_NOMBRE]; // Variable temporal para almacenar el nombre del estudiante
-        int edad;                // Variable temporal para almacenar la edad
+    while (1) //Bucle para recibir "n" estudiantes hasta que el usuario ingrese "fin"
+    { //Crea un bucle infinito hasta que "break;" lo detenga.
+        char name[mn];  //Almacena el nombre de estudiante
+        int edad;  //Almacena edad de estudiante
 
-        printf("Nombre: ");
-        scanf("%s", nombre); // Leer el nombre ingresado por el usuario
+        printf("Nombre:\n");
+        scanf("%s", &name);
 
-        // Si el usuario ingresa "fin", terminamos el ingreso de estudiantes
-        if (strcmp(nombre, "fin") == 0) {
-            break; // Salimos del bucle
-        }
+        if (strcmp(name, "fin") == 0) //strcmp->comparar cadenas de caracteres "char"
+        { //verifica si name es igual a "fin", si devuelve 0 significa que las cadenas son iguales y para el bucle 
+            break; //Termina bucle
+        } 
 
-        printf("Edad: ");
-        scanf("%d", &edad); // Leer la edad ingresada por el usuario
+        printf("Edad: \n");
+        scanf("%d", &edad);
 
-        // Si la lista está llena, duplicamos su tamaño con realloc
-        if (cantidad == capacidad) {
-            capacidad *= 2; // Duplicamos la capacidad del arreglo
-            lista = (Estudiante *)realloc(lista, capacidad * sizeof(Estudiante));
-
-            // Verificamos si realloc fue exitoso
-            if (lista == NULL) {
-                printf("Error al reasignar memoria.\n");
-                return 1; // Terminamos el programa con error
+        if (cant==cap)
+        {
+            cap*=2; // Evita hacer muchas llamadas a realloc, mejorando el rendimiento
+            lista=(estudiante*)realloc(lista, cap* sizeof(estudiante)); //Aumenta el tamaño de la memoria asignada al apuntador lista
+            if (lista==NULL) //Verifica si la memoria fue asignada correctamente
+            {
+                printf("Error al asignar memoria\n");
+                return 1; //Indica que hubo error al asignar la memoria
             }
         }
 
-        // Copiamos los datos ingresados en la lista de estudiantes
-        strcpy(lista[cantidad].nombre, nombre); // Copiamos el nombre
-        lista[cantidad].edad = edad; // Asignamos la edad
-        cantidad++; // Aumentamos el contador de estudiantes
+        strcpy(lista[cant].name, name); //Copia el contenido de name en la posición cant dentro de lista
+        lista[cant].edad=edad; //Guarda la edad ingresada en la  lista[cant]
+        cant++; //Aumenta en 1 la cantidad de estudiantes registrados (cant)
     }
-
-    // Imprimir la lista de estudiantes ingresados
-    printf("\nLista de estudiantes:\n");
-    for (int i = 0; i < cantidad; i++) {
-        printf("Nombre: %s, Edad: %d\n", lista[i].nombre, lista[i].edad);
-    }
-
-    // Liberamos la memoria asignada dinámicamente para evitar fugas
-    free(lista);
-
-    return 0; // Fin del programa
+        printf("Lista de estudiantes:\n");
+        for(int i=0;i<cant;i++)
+        {
+            printf("Nombre: %s, Edad: %d \n", lista[i].name, lista[i].edad);
+        }
+    
+        free(lista); //Libera memoria asignada
+    return 0;
 }
